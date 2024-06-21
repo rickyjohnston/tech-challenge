@@ -27,7 +27,9 @@ class ClientsController extends Controller
     {
         $client = Client::query()
             ->where('id', $client)
-            ->with('bookings')
+            ->with([
+                'bookings' => fn ($query) => $query->latest('start')
+            ])
             ->first();
 
         return view('clients.show', ['client' => $client]);
