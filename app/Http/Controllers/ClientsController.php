@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ClientsController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $clients = Client::query()
             ->where('user_id', Auth::id())
@@ -19,28 +21,12 @@ class ClientsController extends Controller
         return view('clients.index', ['clients' => $clients]);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('clients.create');
     }
 
-    public function show($client)
-    {
-        $client = Client::query()
-            ->where('user_id', Auth::id())
-            ->where('id', $client)
-            ->with([
-                'bookings' => fn ($query) => $query->latest('start'),
-                'journals' => fn ($query) => $query->latest('date'),
-            ])
-            ->first();
-
-        $client->bookings->each->append('time');
-
-        return view('clients.show', ['client' => $client]);
-    }
-
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'name' => ['required', 'string', 'max:190'],
@@ -57,17 +43,31 @@ class ClientsController extends Controller
         $client->postcode = $request->get('postcode');
         $client->save();
 
-        return $client;
+        return Response::json($client);
     }
 
-    public function destroy($client)
-    {
-        $client = Client::where('id', $client)->get();
 
-        abort_unless($client->user_id === Auth::id(), Response::HTTP_FORBIDDEN);
+    public function show(Client $client): View
+    {
+        $this->authorize('view', $client);
+
+        $client->load([
+            'bookings' => fn ($query) => $query->latest('start'),
+            'journals' => fn ($query) => $query->latest('date'),
+        ]);
+
+        $client->bookings->each->append('time');
+
+        return view('clients.show', ['client' => $client]);
+    }
+
+
+    public function destroy(Client $client): JsonResponse
+    {
+        $this->authorize('delete', $client);
 
         $client->delete();
 
-        return 'Deleted';
+        return Response::json('Deleted');
     }
 }
