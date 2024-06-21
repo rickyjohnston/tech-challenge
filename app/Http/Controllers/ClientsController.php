@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
@@ -29,9 +30,11 @@ class ClientsController extends Controller
     public function show($client)
     {
         $client = Client::query()
+            ->where('user_id', Auth::id())
             ->where('id', $client)
             ->with([
-                'bookings' => fn ($query) => $query->latest('start')
+                'bookings' => fn ($query) => $query->latest('start'),
+                'journals' => fn ($query) => $query->latest('date'),
             ])
             ->first();
 

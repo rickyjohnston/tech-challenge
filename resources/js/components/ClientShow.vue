@@ -86,7 +86,43 @@
                 <div class="bg-white rounded p-4" v-if="currentTab == 'journals'">
                     <h3 class="mb-3">List of client journals</h3>
 
-                    <p>(BONUS) TODO: implement this feature</p>
+                    <form @submit.prevent="addJournalEntry">
+                        <div class="form-group">
+                            <label for="journal-date">Date</label>
+                            <input type="date" class="form-control" id="journal-date" v-model="newJournalDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="journal-text">Text</label>
+                            <textarea class="form-control" id="journal-text" rows="3" v-model="newJournalText"></textarea>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-sm">Submit</button>
+                        </div>
+                    </form>
+
+                    <template v-if="client.journals && client.journals.length > 0">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Text</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="journal in journals" :key="journal.id">
+                                    <td>{{ journal.date }}</td>
+                                    <td>{{ journal.text }}</td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" @click="deleteJournal(journal)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </template>
+
+                    <template v-else>
+                        <p class="text-center">The client has no bookings.</p>
+                    </template>
                 </div>
             </div>
         </div>
@@ -104,7 +140,10 @@ export default {
     data() {
         return {
             currentTab: 'bookings',
-            bookingSort: 'all'
+            bookingSort: 'all',
+            bookings: Array.from(this.client.bookings),
+            journals: Array.from(this.client.journals),
+            newJournalText: null
         }
     },
 
@@ -112,11 +151,11 @@ export default {
         bookingList () {
             switch(this.bookingSort) {
                 case 'future':
-                    return this.client.bookings.filter(booking => new Date(booking.start) > new Date());
+                    return this.bookings.filter(booking => new Date(booking.start) > new Date());
                 case 'past':
-                    return this.client.bookings.filter(booking => new Date(booking.start) < new Date());
+                    return this.bookings.filter(booking => new Date(booking.start) < new Date());
                 default:
-                    return this.client.bookings;
+                    return this.bookings;
             }
         }
     },
@@ -128,6 +167,25 @@ export default {
 
         deleteBooking(booking) {
             axios.delete(`/bookings/${booking.id}`);
+        },
+
+        addJournalEntry() {
+            axios.post(`/clients/${this.client.id}/journals`, {
+                    text: this.newJournalText
+                })
+                .then((response) => {
+                    // add response data to beginning of journals array
+                    this.journals.unshift(response.data);
+
+                    this.newJournalText = null;
+                });
+        },
+
+        deleteJournal(journal) {
+            axios.delete(`/clients/${this.client.id}/journals/${journal.id}`)
+                .then((response) => {
+                    this.journals = this.journals.filter(j => j.id !== journal.id);
+                });
         }
     }
 }
