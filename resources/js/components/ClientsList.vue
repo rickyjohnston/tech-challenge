@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="client in clients" :key="client.id">
+                <tr v-for="client in clientList" :key="client.id">
                     <td>{{ client.name }}</td>
                     <td>{{ client.email }}</td>
                     <td>{{ client.phone }}</td>
@@ -37,11 +37,25 @@ import axios from 'axios';
 export default {
     name: 'ClientsList',
 
-    props: ['clients'],
+    props: {
+        clients: {
+            type: Array,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            clientList: Array.from(this.clients)
+        };
+    },
 
     methods: {
         deleteClient(client) {
-            axios.delete(`/clients/${client.id}`);
+            axios.delete(`/clients/${client.id}`)
+                .then(response => {
+                    this.clientList = this.clientList.filter(obj => obj.id != client.id);
+                });
         }
     }
 }
