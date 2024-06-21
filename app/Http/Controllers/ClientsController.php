@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
 class ClientsController extends Controller
@@ -43,7 +43,9 @@ class ClientsController extends Controller
         $client->postcode = $request->get('postcode');
         $client->save();
 
-        return Response::json($client);
+        return Response::json(
+            data: $client
+        );
     }
 
 
@@ -68,6 +70,8 @@ class ClientsController extends Controller
 
         $client->delete();
 
-        return Response::json('Deleted');
+        return Response::json(
+            data: 'Deleted'
+        );
     }
 }

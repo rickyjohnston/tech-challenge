@@ -17,7 +17,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::middleware('auth')->group(function () {
     Route::resource('clients', ClientsController::class);
 
-    Route::get('/clients/{client}/journals', [JournalsController::class, 'index']);
-    Route::post('/clients/{client}/journals', [JournalsController::class, 'store']);
-    Route::delete('/clients/{client}/journals/{journal}', [JournalsController::class, 'destroy']);
+    Route::get('/clients/{client}/journals', [JournalsController::class, 'index'])->name('journals.index');
+    Route::post('/clients/{client}/journals', [JournalsController::class, 'store'])->name('journals.store');
+    Route::delete('/clients/{client}/journals/{journal}', [JournalsController::class, 'destroy'])->name('journals.destroy');
 });

@@ -5,28 +5,31 @@ namespace App\Http\Controllers;
 use App\Client;
 use App\Journal;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 
 class JournalsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Client $client)
+    public function index(Request $request, Client $client): JsonResponse
     {
-        abort_unless($client->user_id === Auth::id(), Response::HTTP_FORBIDDEN);
+        $this->authorize([new Journal(), $client]);
 
-        return $client->journals->latest('date')->get();
+        return Response::json(
+            data: $client->journals()->latest('date')->get()
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Client $client)
+    public function store(Request $request, Client $client): JsonResponse
     {
-        abort_unless($client->user_id === Auth::id(), Response::HTTP_FORBIDDEN);
+        $this->authorize([Journal::class, $client]);
 
         $request->validate([
             'text' => ['required', 'string'],
@@ -39,18 +42,22 @@ class JournalsController extends Controller
         $journal->text = $request->get('text');
         $journal->save();
 
-        return $journal;
+        return Response::json(
+            data: $journal
+        );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Client $client, Journal $journal)
+    public function destroy(Client $client, Journal $journal): JsonResponse
     {
-        abort_unless($journal->client->user_id === Auth::id(), Response::HTTP_FORBIDDEN);
+        $this->authorize($journal);
 
         $journal->delete();
 
-        return 'Deleted';
+        return Response::json(
+            data: 'Deleted'
+        );
     }
 }
