@@ -32,6 +32,8 @@ class ClientsController extends Controller
             ])
             ->first();
 
+        $client->bookings->each->append('time');
+
         return view('clients.show', ['client' => $client]);
     }
 

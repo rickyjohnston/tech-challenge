@@ -17,4 +17,9 @@ class Booking extends Model
         'start',
         'end',
     ];
+
+    public function getTimeAttribute(): string
+    {
+        return $this->start->format('l j F Y, H:i') . ' to ' . $this->end->format('H:i');
+    }
 }

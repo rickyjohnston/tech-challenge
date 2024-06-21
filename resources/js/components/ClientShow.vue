@@ -66,7 +66,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="booking in bookingList" :key="booking.id">
-                                    <td>{{ booking.start }} - {{ booking.end }}</td>
+                                    <td>{{ booking.time }}</td>
                                     <td>{{ booking.notes }}</td>
                                     <td>
                                         <button class="btn btn-danger btn-sm" @click="deleteBooking(booking)">Delete</button>
