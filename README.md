@@ -18,7 +18,7 @@ Welcome to the EasyPractice tech challenge! Below you'll find a list of tasks to
 Complete as many as you can. If you got some time left, there's BONUS tasks, but they're not required ;)
 
 **Solve this first:**
-- [ ] (BUG) I created some seeders that you can run with `php artisan db:seed`, but it gives an error. Can you make it work?
+- [x] (BUG) I created some seeders that you can run with `php artisan db:seed`, but it gives an error. Can you make it work?
 
 **And these in any order:**
 - [ ] (BUG) For some reason, the client bookings are not showing up in the front-end. Can you fix that?
