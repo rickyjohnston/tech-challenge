@@ -27,7 +27,7 @@ class Client extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bookings()
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
     }
@@ -37,7 +37,7 @@ class Client extends Model
         return $this->hasMany(Journal::class);
     }
 
-    public function getUrlAttribute()
+    public function getUrlAttribute(): string
     {
         return "/clients/" . $this->id;
     }
