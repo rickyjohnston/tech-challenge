@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientsController extends Controller
 {
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::query()
+            ->where('user_id', Auth::id())
+            ->get();
 
         foreach ($clients as $client) {
             $client->append('bookings_count');
@@ -59,7 +62,11 @@ class ClientsController extends Controller
 
     public function destroy($client)
     {
-        Client::where('id', $client)->delete();
+        $client = Client::where('id', $client)->get();
+
+        abort_unless($client->user_id === Auth::id(), Response::HTTP_FORBIDDEN);
+
+        $client->delete();
 
         return 'Deleted';
     }
