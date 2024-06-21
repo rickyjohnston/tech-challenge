@@ -15,7 +15,7 @@ class CreateJournalsTable extends Migration
     {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_id')->constrained();
+            $table->foreignId('client_id')->constrained()->cascadeOnDelete();
             $table->date('date');
             $table->text('text');
             $table->timestamps();
