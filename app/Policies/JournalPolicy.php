@@ -15,6 +15,8 @@ class JournalPolicy
      * Determine whether the user can view any models.
      *
      * @param  \App\User  $user
+     * @param  \App\Journal  $journal
+     * @param  \App\Client  $client
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user, Journal $journal, Client $client)
@@ -38,9 +40,11 @@ class JournalPolicy
      * Determine whether the user can create models.
      *
      * @param  \App\User  $user
+     * @param  \App\Journal  $journal
+     * @param  \App\Client  $client
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user, Client $client)
+    public function create(User $user, Journal $journal, Client $client)
     {
         return $client->user_id === $user->id;
     }

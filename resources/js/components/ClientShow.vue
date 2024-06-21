@@ -143,6 +143,7 @@ export default {
             bookingSort: 'all',
             bookings: Array.from(this.client.bookings),
             journals: Array.from(this.client.journals),
+            newJournalDate: null,
             newJournalText: null
         }
     },
@@ -174,11 +175,13 @@ export default {
 
         addJournalEntry() {
             axios.post(`/clients/${this.client.id}/journals`, {
+                    date: this.newJournalDate,
                     text: this.newJournalText
                 })
                 .then((response) => {
                     this.journals.unshift(response.data);
 
+                    this.newJournalDate = null;
                     this.newJournalText = null;
                 });
         },

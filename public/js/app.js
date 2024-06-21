@@ -1966,6 +1966,7 @@ __webpack_require__.r(__webpack_exports__);
       bookingSort: 'all',
       bookings: Array.from(this.client.bookings),
       journals: Array.from(this.client.journals),
+      newJournalDate: null,
       newJournalText: null
     };
   },
@@ -2000,9 +2001,11 @@ __webpack_require__.r(__webpack_exports__);
     addJournalEntry: function addJournalEntry() {
       var _this2 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/clients/".concat(this.client.id, "/journals"), {
+        date: this.newJournalDate,
         text: this.newJournalText
       }).then(function (response) {
         _this2.journals.unshift(response.data);
+        _this2.newJournalDate = null;
         _this2.newJournalText = null;
       });
     },
