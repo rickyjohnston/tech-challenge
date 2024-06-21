@@ -1990,22 +1990,26 @@ __webpack_require__.r(__webpack_exports__);
       this.currentTab = newTab;
     },
     deleteBooking: function deleteBooking(booking) {
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/bookings/".concat(booking.id));
+      var _this = this;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/bookings/".concat(booking.id)).then(function (response) {
+        _this.bookings = _this.bookings.filter(function (b) {
+          return b.id !== booking.id;
+        });
+      });
     },
     addJournalEntry: function addJournalEntry() {
-      var _this = this;
+      var _this2 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post("/clients/".concat(this.client.id, "/journals"), {
         text: this.newJournalText
       }).then(function (response) {
-        // add response data to beginning of journals array
-        _this.journals.unshift(response.data);
-        _this.newJournalText = null;
+        _this2.journals.unshift(response.data);
+        _this2.newJournalText = null;
       });
     },
     deleteJournal: function deleteJournal(journal) {
-      var _this2 = this;
+      var _this3 = this;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]("/clients/".concat(this.client.id, "/journals/").concat(journal.id)).then(function (response) {
-        _this2.journals = _this2.journals.filter(function (j) {
+        _this3.journals = _this3.journals.filter(function (j) {
           return j.id !== journal.id;
         });
       });

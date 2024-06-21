@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JournalsController;
@@ -16,6 +17,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::resource('clients', ClientsController::class);
+
+    Route::delete('/bookings/{booking}', [BookingsController::class, 'destroy'])->name('bookings.destroy');
 
     Route::get('/clients/{client}/journals', [JournalsController::class, 'index'])->name('journals.index');
     Route::post('/clients/{client}/journals', [JournalsController::class, 'store'])->name('journals.store');

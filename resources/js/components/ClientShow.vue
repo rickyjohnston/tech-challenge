@@ -166,7 +166,10 @@ export default {
         },
 
         deleteBooking(booking) {
-            axios.delete(`/bookings/${booking.id}`);
+            axios.delete(`/bookings/${booking.id}`)
+                .then((response) => {
+                    this.bookings = this.bookings.filter(b => b.id !== booking.id);
+                });
         },
 
         addJournalEntry() {
@@ -174,7 +177,6 @@ export default {
                     text: this.newJournalText
                 })
                 .then((response) => {
-                    // add response data to beginning of journals array
                     this.journals.unshift(response.data);
 
                     this.newJournalText = null;
