@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,14 +27,8 @@ class ClientsController extends Controller
         return view('clients.create');
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreClientRequest $request): JsonResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:190'],
-            'email' => ['nullable', 'required_without:phone', 'email:dns'],
-            'phone' => ['nullable', 'required_without:email', 'regex:/^[\d\s\+]+$/'],
-        ]);
-
         $client = new Client;
         $client->name = $request->get('name');
         $client->email = $request->get('email');
@@ -51,7 +46,7 @@ class ClientsController extends Controller
 
     public function show(Client $client): View
     {
-        $this->authorize('view', $client);
+        $this->authorize($client);
 
         $client->load([
             'bookings' => fn ($query) => $query->latest('start'),
@@ -66,7 +61,7 @@ class ClientsController extends Controller
 
     public function destroy(Client $client): JsonResponse
     {
-        $this->authorize('delete', $client);
+        $this->authorize($client);
 
         $client->delete();
 

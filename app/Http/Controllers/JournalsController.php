@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\Http\Requests\StoreJournalRequest;
 use App\Journal;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -27,15 +28,8 @@ class JournalsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Client $client): JsonResponse
+    public function store(StoreJournalRequest $request, Client $client): JsonResponse
     {
-        $this->authorize([Journal::class, $client]);
-
-        $request->validate([
-            'text' => ['required', 'string'],
-            'date' => ['required', 'date'],
-        ]);
-
         $journal = new Journal;
         $journal->client_id = $client->id;
         $journal->date = $request->date('date');
