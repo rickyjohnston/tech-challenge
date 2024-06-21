@@ -37,7 +37,23 @@
 
                 <!-- Bookings -->
                 <div class="bg-white rounded p-4" v-if="currentTab == 'bookings'">
-                    <h3 class="mb-3">List of client bookings</h3>
+                    <div class="flex">
+                        <h3 class="mb-3 mr-auto">List of client bookings</h3>
+
+                        <div>
+                            <select class="form-control form-control-sm" v-model="bookingSort">
+                                <option value="all">
+                                    All Bookings
+                                </option>
+                                <option value="future">
+                                    Future Bookings Only
+                                </option>
+                                <option value="past">
+                                    Past Bookings Only
+                                </option>
+                            </select>
+                        </div>
+                    </div>
 
                     <template v-if="client.bookings && client.bookings.length > 0">
                         <table>
@@ -49,7 +65,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="booking in client.bookings" :key="booking.id">
+                                <tr v-for="booking in bookingList" :key="booking.id">
                                     <td>{{ booking.start }} - {{ booking.end }}</td>
                                     <td>{{ booking.notes }}</td>
                                     <td>
@@ -88,6 +104,20 @@ export default {
     data() {
         return {
             currentTab: 'bookings',
+            bookingSort: 'all'
+        }
+    },
+
+    computed: {
+        bookingList () {
+            switch(this.bookingSort) {
+                case 'future':
+                    return this.client.bookings.filter(booking => new Date(booking.start) > new Date());
+                case 'past':
+                    return this.client.bookings.filter(booking => new Date(booking.start) < new Date());
+                default:
+                    return this.client.bookings;
+            }
         }
     },
 
