@@ -5,15 +5,36 @@
         <div class="max-w-lg mx-auto">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" id="name" class="form-control" v-model="client.name">
+                <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors.name }"
+                    v-model="client.name"
+                >
+                <ErrorList :errorList="errors.name" />
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" class="form-control" v-model="client.email">
+                <input
+                    type="email"
+                    id="email"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors.email }"
+                    v-model="client.email"
+                >
+                <ErrorList :errorList="errors.email" />
             </div>
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input type="text" id="phone" class="form-control" v-model="client.phone">
+                <input
+                    type="tel"
+                    id="phone"
+                    class="form-control"
+                    :class="{ 'is-invalid': errors.phone }"
+                    v-model="client.phone"
+                >
+                <ErrorList :errorList="errors.phone" />
             </div>
             <div class="form-group">
                 <label for="name">Address</label>
@@ -40,9 +61,14 @@
 
 <script>
 import axios from 'axios';
+import ErrorList from './ErrorList.vue';
 
 export default {
     name: 'ClientForm',
+
+    components: {
+        ErrorList
+    },
 
     data() {
         return {
@@ -53,7 +79,8 @@ export default {
                 address: '',
                 city: '',
                 postcode: '',
-            }
+            },
+            errors: {}
         }
     },
 
@@ -62,6 +89,9 @@ export default {
             axios.post('/clients', this.client)
                 .then((data) => {
                     window.location.href = data.data.url;
+                })
+                .catch(errors => {
+                    this.errors = Object.assign({}, errors.response.data.errors);
                 });
         }
     }
