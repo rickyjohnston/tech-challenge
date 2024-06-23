@@ -2505,7 +2505,7 @@ var render = function render() {
     }, [_vm._v("Delete")])])]);
   }), 0)])] : [_c("p", {
     staticClass: "text-center"
-  }, [_vm._v("The client has no bookings.")])]], 2) : _vm._e()])])]);
+  }, [_vm._v("The client has no journals.")])]], 2) : _vm._e()])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,

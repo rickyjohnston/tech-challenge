@@ -18,4 +18,8 @@ return RectorConfig::configure()
     // ->withPhpSets()
     ->withRules([
         AddVoidReturnTypeWhereNoReturnRector::class,
-    ]);
+    ])
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+    );
