@@ -121,7 +121,7 @@
                     </template>
 
                     <template v-else>
-                        <p class="text-center">The client has no bookings.</p>
+                        <p class="text-center">The client has no journals.</p>
                     </template>
                 </div>
             </div>
