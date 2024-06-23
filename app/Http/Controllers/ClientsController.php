@@ -6,6 +6,7 @@ use App\Client;
 use App\Http\Requests\StoreClientRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
@@ -33,13 +34,15 @@ class ClientsController extends Controller
         $client->name = $request->get('name');
         $client->email = $request->get('email');
         $client->phone = $request->get('phone');
-        $client->adress = $request->get('adress');
+        $client->address = $request->get('address');
         $client->city = $request->get('city');
         $client->postcode = $request->get('postcode');
+        $client->user_id = Auth::id();
         $client->save();
 
         return Response::json(
-            data: $client
+            data: $client,
+            status: HttpResponse::HTTP_CREATED
         );
     }
 
