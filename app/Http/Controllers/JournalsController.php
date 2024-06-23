@@ -8,6 +8,7 @@ use App\Journal;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
@@ -37,7 +38,8 @@ class JournalsController extends Controller
         $journal->save();
 
         return Response::json(
-            data: $journal
+            data: $journal,
+            status: HttpResponse::HTTP_CREATED
         );
     }
 
