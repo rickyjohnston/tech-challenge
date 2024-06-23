@@ -26,6 +26,5 @@ abstract class TestCase extends BaseTestCase
         EloquentCollection::macro('assertNotContains', function ($value) {
             Assert::assertFalse($this->contains($value), 'Failed asserting that the collection does not contain the specified value.');
         });
-
     }
 }

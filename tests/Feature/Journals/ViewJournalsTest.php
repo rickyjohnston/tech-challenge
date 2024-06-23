@@ -29,7 +29,7 @@ class ViewJournalsTest extends TestCase
 
         $this->get(route('journals.index', $client))
             ->assertRedirect(route('login'));
-}
+    }
 
     /** @test */
     public function a_user_can_only_retrieve_a_listing_of_journals_associated_with_their_clients()

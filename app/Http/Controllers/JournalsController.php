@@ -31,7 +31,7 @@ class JournalsController extends Controller
      */
     public function store(StoreJournalRequest $request, Client $client): JsonResponse
     {
-        $journal = new Journal;
+        $journal = new Journal();
         $journal->client_id = $client->id;
         $journal->date = $request->date('date');
         $journal->text = $request->get('text');

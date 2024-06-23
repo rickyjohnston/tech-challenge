@@ -67,5 +67,4 @@ class ClientPolicy
     {
         return $client->user_id === $user->id;
     }
-
 }

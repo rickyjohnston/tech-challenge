@@ -30,7 +30,7 @@ class ClientsController extends Controller
 
     public function store(StoreClientRequest $request): JsonResponse
     {
-        $client = new Client;
+        $client = new Client();
         $client->name = $request->get('name');
         $client->email = $request->get('email');
         $client->phone = $request->get('phone');
