@@ -36,7 +36,7 @@ class DeleteJournalsTest extends TestCase
             ->assertRedirect(route('login'));
 
         $this->assertDatabaseHas('journals', ['id' => $journal->id]);
-}
+    }
 
     /** @test */
     public function a_user_can_only_delete_journals_associated_with_their_own_clients()
